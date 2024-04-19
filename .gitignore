@@ -1,0 +1,15 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.vs/
+.vscode/
+*.user
+*.swp
+*.swo
+*ReSharper*
+*resharper*
+.idea/
+node_modules/
+bower_components/

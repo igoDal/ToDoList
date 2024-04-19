@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Add new task";
+}
+<style>
+    head, body, html {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+    
+    a {
+        color: #bb86fc;
+    }
+    
+        #ScheduledDate {
+                width: auto; /* Adjust width to fit content */
+                max-width: 200px; /* Max width for the date picker input */
+                display: inline-block; /* Display input inline */
+            }
+</style>
+
+<form method="post" id="transactionForm" enctype="multipart/form-data" action="@Url.Action("AddTask", "Task")">
+    <div class="text-center form-element">
+        <div class="text-center form-element">
+            <div>
+                <label>Select date:</label>
+                <input type="date" id="ScheduledDate" name="ScheduledDate" class="form-control"/>
+                
+                <label>Name: </label>
+                <input id="Name" name="Name" type="text" required/>
+            </div>
+        </div>
+        <div class="text-center form-element">
+            <button class="btn btn-secondary" type="submit" id="submitBtn">Submit</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Edit task";
+}
+<style>
+    head, body, html {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+    
+    a {
+        color: #bb86fc;
+    }
+</style>
+
+<form method="post" id="transactionForm" enctype="multipart/form-data" action="@Url.Action("EditTask", "Task", new { id = Model.Id })">
+    <div class="text-center form-element">
+        <div class="text-center form-element">
+            <div>
+                <label>Select date:</label>
+                <input type="date" id="ScheduledDate" name="ScheduledDate" class="form-control" value="@ViewData["SelectedDate"]"/>
+                
+                <label>Name: </label>
+                <input id="Name" name="Name" type="text" required value="@ViewData["Name"]"/>
+            </div>
+        </div>
+        <div class="text-center form-element">
+            <button type="submit" id="submitBtn">Submit</button>
+        </div>
+    </div>
+</form>

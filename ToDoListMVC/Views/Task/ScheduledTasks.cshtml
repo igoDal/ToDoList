@@ -1,0 +1,142 @@
+@model IEnumerable<ToDoListMVC.Models.Tasks>
+@{
+    ViewData["Title"] = "Scheduled Tasks";
+}
+<style>
+    head, body, html {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+    
+    a {
+        color: #bb86fc;
+    }
+
+    head, body, html {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+    
+    a {
+        color: #bb86fc;
+    }
+    
+    .table th:nth-child(2), .table td:nth-child(2) {
+        width: 70%; /* Make the 'Name' column wider */
+    }
+    
+    .table th, .table td {
+        width: 8%; /* Equal width for the other columns */
+    }
+    
+    #ScheduledDate {
+            width: auto; /* Adjust width to fit content */
+            max-width: 200px; /* Max width for the date picker input */
+            display: inline-block; /* Display input inline */
+        }
+</style>
+
+<form method="get" action="@Url.Action("RedirectToScheduledTasks", "Task")">
+    <div class="form-group">
+        <div class="filtering-class">
+            <label for="ScheduledDate">Date:</label>
+            <input type="date" id="ScheduledDate" name="date" class="form-control" value="@ViewData["SelectedDate"]"/>
+
+        </div>
+    </div>
+    <button type="submit" class="btn btn-secondary" onclick="setAction('Filter')">Filter</button>
+    <button id="todayButton" type="submit" class="btn btn-secondary" onclick="setAction('Today')">Today</button>
+</form>
+
+<table class="table">
+    <thead>
+    <tr>
+        
+        <th>Is Done?</th>
+        <th>Name</th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var record in Model)
+    {
+        <tr>
+            <td>
+                @if (!@record.IsDone)
+                {
+                    <p></p>
+                }
+                else
+                {
+                    <p>Done</p>
+                }
+                
+            </td>
+            <td>@record.Name</td>
+            <td>
+                @if (!record.IsDone)
+                {
+                    <a href="@Url.Action("MarkAsDone", "Task", new { id = record.Id})"
+                       class="btn btn-primary"> Done </a>
+                }
+                else
+                {
+                    <button class="btn btn-primary" disabled> Done </button>
+                }
+            </td>
+            <td>
+                @if (!record.IsDone)
+                {
+                    <a href="@Url.Action("RedirectToEditTask", "Task", record)"
+                       id="editBtn" class="btn btn-secondary"> Edit </a>
+                }
+                else
+                {
+                    <button class="btn btn-secondary" disabled> Edit </button>
+                }
+            </td>
+            <td>
+                @if (!record.IsDone)
+                {
+                    <a href="@Url.Action("DeleteTask", "Task", new { id = record.Id })"
+                                       id="deleteBtn" class="btn btn-secondary"> Delete </a>
+                }
+                else
+                {
+                    <button class="btn btn-secondary" disabled> Delete </button>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
+
+    <script>
+    function setAction(action) {
+        var form = document.getElementById('taskForm');
+        if (action === 'Today') {
+            form.action = '@Url.Action("RedirectToScheduledTasks", "Task", new { date = DateTime.Today })';
+        } else {
+            form.action = '@Url.Action("RedirectToScheduledTasks", "Task")';
+        }
+        form.submit();
+    }
+    
+    </script>
+    <script>
+    function setCurrentDate() {
+        var polandDate = moment().tz("Europe/Warsaw").format('YYYY-MM-DD');
+        document.getElementById('ScheduledDate').value = polandDate;
+        document.forms[0].submit(); // Submit the first form on the page
+    }
+
+    document.getElementById('todayButton').addEventListener('click', setCurrentDate);
+    </script>
+}
