@@ -3,36 +3,19 @@
     ViewData["Title"] = "Scheduled Tasks";
 }
 <style>
-    head, body, html {
-        background-color: #121212;
-        color: #e0e0e0;
-    }
-    
-    a {
-        color: #bb86fc;
-    }
-
-    head, body, html {
-        background-color: #121212;
-        color: #e0e0e0;
-    }
-    
-    a {
-        color: #bb86fc;
-    }
     
     .table th:nth-child(2), .table td:nth-child(2) {
-        width: 70%; /* Make the 'Name' column wider */
+        width: 70%;
     }
     
     .table th, .table td {
-        width: 8%; /* Equal width for the other columns */
+        width: 8%;
     }
     
     #ScheduledDate {
-            width: auto; /* Adjust width to fit content */
-            max-width: 200px; /* Max width for the date picker input */
-            display: inline-block; /* Display input inline */
+            width: auto;
+            max-width: 200px;
+            display: inline-block;
         }
 </style>
 
@@ -134,7 +117,7 @@
     function setCurrentDate() {
         var polandDate = moment().tz("Europe/Warsaw").format('YYYY-MM-DD');
         document.getElementById('ScheduledDate').value = polandDate;
-        document.forms[0].submit(); // Submit the first form on the page
+        document.forms[0].submit();
     }
 
     document.getElementById('todayButton').addEventListener('click', setCurrentDate);

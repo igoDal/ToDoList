@@ -2,18 +2,11 @@
     ViewData["Title"] = "Home Page";
 }
 <style>
-    head, body, html {
-        background-color: #121212;
-        color: #e0e0e0;
-    }
-    
-    a {
-        color: #bb86fc;
-    }
+
 </style>
 
 <div class="text-center">
     <a href="@Url.Action("RedirectToNewTask", "Task")" class="btn btn-secondary">Add New Task</a>
-    <a href="@Url.Action("RedirectToScheduledTasks", "Task")" class="btn btn-secondary">View Tasks</a>
+    <a href="@Url.Action("RedirectToScheduledTasks", "Task")" class="btn btn-secondary">View and Manage Tasks</a>
 
 </div>

@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDoListMVC.Models;
 
 namespace ToDoListMVC.Controllers;
 
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -18,7 +20,8 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Privacy()
+    [AllowAnonymous]
+    public IActionResult Instructions()
     {
         return View();
     }

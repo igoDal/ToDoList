@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -7,6 +8,7 @@ using ToDoListMVC.Models;
 
 namespace ToDoListMVC.Controllers;
 
+[Authorize]
 public class TaskController : Controller
 {
     private readonly ILogger<TaskController> _logger;
@@ -37,9 +39,7 @@ public class TaskController : Controller
     public IActionResult RedirectToScheduledTasks(DateTime? date)
     {
         DateTime targetDate = date ?? DateTime.Today;
-        var query = _context.Tasks.AsQueryable();
-
-        var scheduledTasks = query.Where(x => x.IsDeleted == false).Where(x => x.ScheduledDate == targetDate.Date).ToList();
+        var scheduledTasks = GetTasks(date);
         
         ViewData["SelectedDate"] = targetDate.ToString("yyyy-MM-dd");
         return View("ScheduledTasks", scheduledTasks);
@@ -49,6 +49,7 @@ public class TaskController : Controller
     {
         try
         {
+            task.Username = User.Identity.Name;
             task.CreatedDate = DateTime.Now;
             DateTime targetDate = task.ScheduledDate >= DateTime.Today ? task.ScheduledDate : DateTime.Today;
             task.ScheduledDate = targetDate;
@@ -68,7 +69,11 @@ public class TaskController : Controller
     {
         try
         {
-            await SaveAsync(task);
+            var query = _context.Tasks.AsQueryable();
+            var taskToUpdate = query.Where(x => x.Id == task.Id).FirstOrDefault();
+            taskToUpdate.Name = task.Name;
+            taskToUpdate.ScheduledDate = task.ScheduledDate;
+            await SaveAsync(taskToUpdate);
         }
         catch (Exception e)
         {
@@ -137,11 +142,13 @@ public class TaskController : Controller
         
     }
 
-    public async Task<IEnumerable<Tasks>> GetTasks(DateTime? date)
+    public IEnumerable<Tasks> GetTasks(DateTime? date)
     {
         DateTime targetDate = date ?? DateTime.Today;
         var query = _context.Tasks.AsQueryable();
-        return await query.Where(x => x.ScheduledDate == targetDate).ToListAsync();
+        return query.Where(x => x.ScheduledDate == targetDate 
+                                && x.Username == User.Identity.Name
+                                && x.IsDeleted == false).ToList();
     }
 
     public async Task<Tasks> GetSingleTask(int id)
@@ -149,4 +156,5 @@ public class TaskController : Controller
         var query = _context.Tasks.AsQueryable();
         return await query.Where(x => x.Id == id).FirstOrDefaultAsync();
     }
+    
 }
